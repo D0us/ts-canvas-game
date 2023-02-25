@@ -10,7 +10,7 @@ class Player {
         this.width = playerWidth;
         this.height = playerHeight;
         this.posX = 0;
-        this.posY = this.game.height - playerHeight;
+        this.posY = this.game.height - playerHeight - this.game.groundMargin;
         this.speed = 0;
         this.maxSpeed = 10;
         this.velocityY = 0;
@@ -78,7 +78,7 @@ class Player {
         // if (this.posY < 0) this.posY = 0; // top
     }
     onGround() {
-        return this.posY >= this.game.height - this.height;
+        return this.posY >= this.game.height - this.height - this.game.groundMargin;
     }
     setFrameX(frameX) {
         this.frameX = frameX;
@@ -86,8 +86,9 @@ class Player {
     setFrameY(frameY) {
         this.frameY = frameY;
     }
-    setState(stateIndex) {
+    setState(stateIndex, speed) {
         this.currentState = this.states[stateIndex];
+        this.game.speed = speed * this.game.maxSpeed;
         console.log(this.currentState);
         this.currentState.enter();
     }

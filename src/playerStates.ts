@@ -25,13 +25,16 @@ export class Sitting extends PlayerStates {
 
   enter() {
     console.log("SITTING");
+    this.player.setFrameX(0);
     this.player.setFrameY(1);
-    this.player.setFrameX(4);
   }
 
   handleInput(input: string[]) {
     if (input.includes("ArrowLeft") || input.includes("ArrowRight")) {
-      this.player.setState(States.RUNNING);
+      this.player.setState(States.RUNNING, 1);
+    }
+    if (input.includes("ArrowUp")) {
+      this.player.setState(States.JUMPING, 1);
     }
   }
 }
@@ -45,17 +48,17 @@ export class Running extends PlayerStates {
 
   enter() {
     console.log("RUNNING");
-    this.player.maxFrame = 2;
-    this.player.setFrameY(1);
-    // this.player.setFrameX(0);
+    this.player.maxFrame = 6;
+    this.player.setFrameX(0);
+    this.player.setFrameY(7);
   }
 
   handleInput(input: string[]) {
     if (input.includes("ArrowDown")) {
-      this.player.setState(States.SITTING);
+      this.player.setState(States.SITTING, 0);
     }
     if (input.includes("ArrowUp")) {
-      this.player.setState(States.JUMPING);
+      this.player.setState(States.JUMPING, 1);
     }
   }
 }
@@ -70,6 +73,7 @@ export class Jumping extends PlayerStates {
   enter() {
     console.log("JUMPING");
     this.player.maxFrame = 10;
+    this.player.setFrameX(0);
     this.player.setFrameY(6);
     // this.player.setFrameX(1);
   }
@@ -77,7 +81,7 @@ export class Jumping extends PlayerStates {
   handleInput(input: string[]) {
     if (this.player.onGround()) this.player.velocityY -= 30;
     if (this.player.velocityY > this.player.weight) {
-      this.player.setState(States.FALLING);
+      this.player.setState(States.FALLING, 1);
     }
   }
 }
@@ -91,12 +95,12 @@ export class Falling extends PlayerStates {
 
   enter() {
     console.log("FALLING");
+    this.player.setFrameX(0);
     this.player.setFrameY(2);
-    this.player.setFrameX(3);
   }
 
   handleInput(input: string[]) {
-    if (this.player.onGround()) this.player.setState(States.RUNNING);
+    if (this.player.onGround()) this.player.setState(States.RUNNING, 1);
   }
 }
 

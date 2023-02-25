@@ -13,6 +13,7 @@
   transform: translate(-50%, -50%);
   max-width: 100%;
   max-height: 100%;
+  image-rendering: pixelated;
   /* z-index: 1; */
 }
 
@@ -27,4 +28,11 @@
   top: 0;
   left: 0;
   /* z-index: 2; */
+}
+
+.layer {
+  display: none;
+  width: 480px;
+  height: 270px;
+  /* image-rendering: pixelated; */
 }

@@ -42,14 +42,20 @@ class Game {
   ctx: CanvasRenderingContext2D;
   input: InputHandler;
   state: GameState = GameState.RUNNING;
+  groundMargin: number;
+  speed: number;
+  maxSpeed: number;
 
   constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
     this.canvas = canvas;
     this.width = canvas.width;
     this.height = canvas.height;
+    this.groundMargin = 10;
+    this.speed = 0;
+    this.maxSpeed = 1;
+    this.background = new Background(this);
     this.player = new Player(this);
-    this.background = new Background(this, "black");
     this.input = new InputHandler();
   }
 
