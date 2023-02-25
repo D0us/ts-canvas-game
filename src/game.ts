@@ -5,23 +5,33 @@ import InputHandler from "./inputHandler.js";
 window.addEventListener("load", () => {
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   const ctx = canvas.getContext("2d");
-  canvas.width = 500;
-  canvas.height = 500;
+  canvas.width = 480;
+  canvas.height = 270;
 
   if (!ctx) throw new Error("No context found!");
 
   const game = new Game(canvas, ctx);
 
+  let lastTime = 0;
   // Animation loop
-  function animate() {
+  function animate(timeStamp: number) {
+    const deltaTime = timeStamp - lastTime; // time in ms since last frame
+    lastTime = timeStamp;
     ctx?.clearRect(0, 0, canvas.width, canvas.height);
-    game.update();
+    game.update(deltaTime);
     game.draw();
     requestAnimationFrame(animate);
   }
 
-  animate();
+  animate(0);
 });
+
+enum GameState {
+  RUNNING,
+  PAUSED,
+  MENU,
+  GAME_OVER,
+}
 
 class Game {
   width: number;
@@ -31,6 +41,7 @@ class Game {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   input: InputHandler;
+  state: GameState = GameState.RUNNING;
 
   constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
@@ -38,18 +49,23 @@ class Game {
     this.width = canvas.width;
     this.height = canvas.height;
     this.player = new Player(this);
-    this.background = new Background(this, "blue");
+    this.background = new Background(this, "black");
     this.input = new InputHandler();
   }
 
-  update() {
+  update(deltaTime: number) {
     this.background.update();
-    this.player.update(this.input.keys);
+    this.player.update(deltaTime, this.input.keys);
   }
 
   draw() {
     this.background.draw(this.ctx);
     this.player.draw(this.ctx);
+  }
+
+  end() {
+    // Game over
+    this.state = GameState.GAME_OVER;
   }
 }
 
